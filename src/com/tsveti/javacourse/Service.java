@@ -5,6 +5,12 @@ public class Service implements Product {
     private int estimatedTaskDuration;
     private boolean timeAndMaterials;
 
+    public Service(String name, int estimatedTaskDuration, boolean timeAndMaterials){
+        this.name = name;
+        this.estimatedTaskDuration = estimatedTaskDuration;
+        this.timeAndMaterials = timeAndMaterials;
+    }
+
     public String getName(){
         return name;
     }

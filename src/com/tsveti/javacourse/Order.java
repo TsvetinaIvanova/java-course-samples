@@ -6,11 +6,15 @@ public class Order {
     private String customer;
     private Product product;
     private int quantity;
+    public static Rushable rushable;
     public MyDate getOrderDate() {
         return orderDate;
     }
     public void setOrderDate(MyDate orderDate) {
-        this.orderDate = orderDate;
+        if(isHoliday(orderDate)) {
+            System.out.println("Order date, " + orderDate + ", cannot be set to a holiday!");
+        }
+            this.orderDate = orderDate;
     }
     public double getOrderAmount() {
         return orderAmount;
@@ -48,6 +52,15 @@ public class Order {
                     .println("Attempting to set the quantity to a value less than or equal to zero");
         }
     }
+
+    public static Rushable getRushable() {
+        return rushable;
+    }
+
+    public static void setRushable(Rushable rushable) {
+        Order.rushable = rushable;
+    }
+
     public static double getTaxRate() {
         return taxRate;
     }
@@ -61,11 +74,19 @@ public class Order {
                         * Order.taxRate);
     }
     public Order(MyDate d, double amt, String c, Product p, int q) {
-        orderDate = d;
+        setOrderDate(d);
         orderAmount = amt;
         customer = c;
         product = p;
         quantity = q;
+    }
+
+    public boolean isPriorityOrder(){
+        boolean priorityOrder = false;
+        if(rushable!=null){
+            priorityOrder = rushable.isRushable(orderDate, orderAmount);
+        }
+        return priorityOrder;
     }
     public String toString() {
         return quantity + " ea. " + product + " for " + customer;
@@ -103,6 +124,16 @@ public class Order {
             total = total + computeTax();
         }
         return total;
+    }
+
+    private boolean isHoliday(MyDate date){
+        MyDate[] holidays = MyDate.getHolidays();
+        for(int i = 0; i < holidays.length; i++){
+            if(date.equals(holidays[i])){
+                return true;
+            }
+        }
+        return false;
     }
 
 }
